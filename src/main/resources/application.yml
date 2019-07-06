@@ -1,0 +1,6 @@
+
+#д╛хой╧сцеДжц
+spring:
+    profiles:
+        active: dev
+
