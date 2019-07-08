@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +30,19 @@ public class UserInfoController {
     @GetMapping("/selectUserInfo/{id}")  //checked
     public UserInfo selectUserInfo(@PathVariable("id") String id){return userInfoServiceIMPL.selectUserInfo(id);}
 
-    @GetMapping("/findAllUserInfo")  //checked
-    public List<UserInfo> findAllUserInfo(){return userInfoServiceIMPL.findAllUserInfo();}
+    @GetMapping("/admin/findAllUserInfo")  //checked
+	public List<UserInfo> findAllUserInfo(){
+	 List<UserInfo> userInfos= userInfoServiceIMPL.findAllUserInfo();
+        for (UserInfo o:userInfos
+             ) {
+            Date date=o.getEndTime();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+//设置转化格式
+            java.sql.Date date1= java.sql.Date.valueOf(sdf.format(date));
+            o.setEndTime(date1);
+
+        }
+        return userInfos;}
 
 
     @PostMapping("/addUserInfo/{viptype}") //checked

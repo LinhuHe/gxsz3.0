@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -75,5 +76,31 @@ public class GoodsRoughServiceIMPL {
         return goodsRoughMapper.findTopFiveByDate();
     }
 
-    public List<GoodsRough> findDistinctBranch(){return goodsRoughMapper.findDistinctBranch();}
+    public List<GoodsRough> findDistinctBranch(){
+        GoodsRough goodsRough=new GoodsRough();
+        List<GoodsRough> all=this.findWhateverYouWant(goodsRough);
+        String[] allBrand=goodsRoughMapper.findDistinctBranch();
+        List<GoodsRough> target=new ArrayList<>();
+
+        for(int i=0;i<allBrand.length;i++){
+            System.out.println(allBrand[i]+"----");
+        }
+        int brandNumber=allBrand.length;
+        int index=allBrand.length+1;
+        GoodsRough tmp=new GoodsRough();
+        //取得目标品牌的记录
+        for (int i=0;i<brandNumber;i++){
+            for(int k=0;k<all.size();k++){
+                goodsRough=all.get(k);
+                if(goodsRough.getBrand().equals(allBrand[i])){
+                    target.add(all.get(k));
+                    System.out.println("找到了"+goodsRough.getBrand());
+                    break;
+                }
+            }
+        }
+        System.out.println(target);
+        return target;
+
+    }
 }

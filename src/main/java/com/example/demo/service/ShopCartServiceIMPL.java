@@ -49,10 +49,14 @@ public class ShopCartServiceIMPL {
         return  shopCartMapper.selectByExample(shopCartExample);
     }
 
-    public boolean buyFromShopCart(ShopCart shopCart,int days,String dilivery){
+    public boolean buyFromShopCart(ShopCart shopCart,GoodsDetail goodsDetail,int days,String dilivery){
         boolean flag=false;
-        OrderInfo newOrder=orderInfoServiceIMPL.buildOrder(shopCart,days,dilivery);
+        OrderInfo newOrder=orderInfoServiceIMPL.buildOrder(shopCart,goodsDetail,days,dilivery);
         flag=orderInfoServiceIMPL.addOrderInfo(newOrder);
+
+        //finish order delete shop cart
+        shopCartMapper.deleteByPrimaryKey(shopCart);
+
         return flag;
     }
 

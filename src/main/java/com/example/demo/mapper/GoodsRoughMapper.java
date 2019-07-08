@@ -28,7 +28,7 @@ public interface GoodsRoughMapper {
 
     int updateByPrimaryKey(GoodsRough record);
 
-    List<GoodsRough> findDistinctBranch();
+    String[] findDistinctBranch();
 
     List<GoodsRough> findTopFiveByDate();
 }

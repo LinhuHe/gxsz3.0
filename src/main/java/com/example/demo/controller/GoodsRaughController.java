@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.GoodsRough;
+import com.example.demo.mapper.GoodsRoughMapper;
 import com.example.demo.service.GoodsRoughServiceIMPL;
 //import jdk.nashorn.internal.runtime.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import java.util.List;
 public class GoodsRaughController {
     @Autowired
     private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
+    @Autowired
+    private GoodsRoughMapper goodsRoughMapper;
 
     @GetMapping("goodsRough/findWhateverYouWant") //checked
     public List<GoodsRough> findWhateverYouWant(GoodsRough goodsRough){return goodsRoughServiceIMPL.findWhateverYouWant(goodsRough);}

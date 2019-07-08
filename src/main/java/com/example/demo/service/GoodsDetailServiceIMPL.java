@@ -69,4 +69,9 @@ public class GoodsDetailServiceIMPL {
         GoodsDetail goodsDetail=goodsDetailMapper.selectByPrimaryKey(goodDetailId);
         return goodsDetail.getGoodsId();
     }
+
+    public void updateStock(GoodsDetail goodsDetail)
+    {
+        goodsDetailMapper.updateStock(goodsDetail);
+    }
 }

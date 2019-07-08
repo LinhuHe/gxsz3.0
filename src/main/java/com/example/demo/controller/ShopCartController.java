@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.GoodsDetail;
 import com.example.demo.entity.GoodsRough;
 import com.example.demo.entity.OrderInfo;
 import com.example.demo.entity.ShopCart;
@@ -27,7 +28,13 @@ public class ShopCartController {
     public List<ShopCart> findShopCardByUserID(@PathVariable("id") String id){return shopCartServiceIMPL.findShopCardByUserID(id);}
 
     @PostMapping("/buyFromShopCart")  //uncheck
-    public boolean buyFromShopCart(ShopCart shopCart,int days,String dilivery){return shopCartServiceIMPL.buyFromShopCart(shopCart,days,dilivery);}
+    public boolean buyFromShopCart(ShopCart shopCart,GoodsDetail goodsDetail,int days,String dilivery){ //其中shopcart需要传入主键，goodsdetail需要传入可以确定主键的东西（颜色+size）
+        System.out.println("-------------------------buyFromShopCart what i get------------------------");
+        System.out.println("goodsdid is :"+shopCart.getGoodsDetailId()+"  userid is:"+shopCart.getUserId());
+        System.out.println(goodsDetail);
+        System.out.println("---------------------------------------------------------------------------");
+        return shopCartServiceIMPL.buyFromShopCart(shopCart,goodsDetail,days,dilivery);
+    }
 
     @GetMapping("/isShopCart")
     public boolean isShopCatr(ShopCart shopCart){return shopCartServiceIMPL.isShopCatr(shopCart);}

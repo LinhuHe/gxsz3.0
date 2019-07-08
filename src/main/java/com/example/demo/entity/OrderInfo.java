@@ -93,4 +93,19 @@ public class OrderInfo {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "OrderInfo{" +
+                "orderId=" + orderId +
+                ", amount=" + amount +
+                ", delivery='" + delivery + '\'' +
+                ", goodsDetailId=" + goodsDetailId +
+                ", orderDate=" + orderDate +
+                ", orderPrice=" + orderPrice +
+                ", status=" + status +
+                ", leaseTerm=" + leaseTerm +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }

@@ -223,4 +223,9 @@
       style = #{style,jdbcType=VARCHAR}
     where goods_detai_id = #{goodsDetaiId,jdbcType=INTEGER}
   </update>
+  <update id="updateStock" parameterType="com.example.demo.entity.GoodsDetail">
+    update goods_detail
+    set stock = #{stock,jdbcType=INTEGER}
+    where goods_detai_id = #{goodsDetaiId,jdbcType=INTEGER}
+  </update>
 </mapper>

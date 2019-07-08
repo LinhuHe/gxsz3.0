@@ -27,4 +27,6 @@ public interface GoodsDetailMapper {
     int updateByPrimaryKeySelective(GoodsDetail record);
 
     int updateByPrimaryKey(GoodsDetail record);
+
+    void updateStock(GoodsDetail goodsDetail);
 }

@@ -51,16 +51,21 @@ public class UserInfoServiceIMPL  {
         {
             return null;
         }
-    };
+    }
     public UserInfo selectUserInfo(String id){
         return  userInfoMapper.selectByPrimaryKey(id);
-    };
+    }
+
+    public void updateLevel(UserInfo userInfo)
+    {
+        userInfoMapper.updateLevel(userInfo);
+    }
     public List<UserInfo> findAllUserInfo(){
         UserInfoExample userInfoExample=new UserInfoExample();
         userInfoExample.or().andUserIdGreaterThan("");
         return userInfoMapper.selectByExample(userInfoExample);
 
-    };
+    }
 
 
     public boolean addUserInfo(UserInfo userInfo,int viptype){
@@ -97,7 +102,7 @@ public class UserInfoServiceIMPL  {
             Date newdate =calendar.getTime();
             System.out.println("is vip, viptype is:"+viptype+"   enddate is:"+newdate);
             userInfo.setEndTime(newdate);
-            userInfoMapper.updateByPrimaryKey(userInfo);
+            userInfoMapper.updateDate(userInfo);
             return true;
         }
     }

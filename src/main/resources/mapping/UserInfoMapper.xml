@@ -240,4 +240,14 @@
       user_sex = #{userSex,jdbcType=TINYINT}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+  <update id="updateLevel" parameterType="com.example.demo.entity.UserInfo">
+    update user_info
+    set user_level = #{userLevel,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateDate" parameterType="com.example.demo.entity.UserInfo">
+    update user_info
+    set end_time = #{endTime,jdbcType=DATE}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.GoodsRough;
 import com.example.demo.entity.UserCollectionKey;
 import com.example.demo.service.UserCollectionServiceIMPL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +28,7 @@ public class UserCollectionController {
 
     @GetMapping("/isLiked")
     public boolean isliked(UserCollectionKey userCollectionKey){return userCollectionServiceIMPL.isliked(userCollectionKey);}
+
+    @GetMapping("/findInfoByCollection")
+    public List<GoodsRough> findInfoByCollection(UserCollectionKey userCollectionKey){return userCollectionServiceIMPL.findInfoByCollection(userCollectionKey);}
 }

@@ -60,4 +60,16 @@ public class GoodsDetail {
     public void setStyle(String style) {
         this.style = style;
     }
+
+    @Override
+    public String toString() {
+        return "GoodsDetail{" +
+                "goodsDetaiId=" + goodsDetaiId +
+                ", goodsId=" + goodsId +
+                ", color='" + color + '\'' +
+                ", size='" + size + '\'' +
+                ", stock=" + stock +
+                ", style='" + style + '\'' +
+                '}';
+    }
 }

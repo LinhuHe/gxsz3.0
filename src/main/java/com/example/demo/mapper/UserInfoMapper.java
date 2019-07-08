@@ -5,6 +5,8 @@ import com.example.demo.entity.UserInfoExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
+import javax.jws.soap.SOAPBinding;
+
 public interface UserInfoMapper {
     long countByExample(UserInfoExample example);
 
@@ -27,4 +29,8 @@ public interface UserInfoMapper {
     int updateByPrimaryKeySelective(UserInfo record);
 
     int updateByPrimaryKey(UserInfo record);
+
+    void updateDate(UserInfo userInfo);
+
+    void  updateLevel(UserInfo userInfo);
 }

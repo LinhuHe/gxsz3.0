@@ -15,11 +15,12 @@ import java.util.List;
 public class OrderInfoServiceIMPL {
     @Autowired
     private OrderInfoMapper orderInfoMapper;
-
     @Autowired
     private GoodsDetailServiceIMPL goodsDetailServiceIMPL;
     @Autowired
     private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
+    @Autowired
+    private UserInfoServiceIMPL userInfoServiceIMPL;
     //直接更新orderInfo
     public void updateOrderInfo(OrderInfo orderInfo){
         orderInfoMapper.updateByPrimaryKey(orderInfo);
@@ -36,7 +37,6 @@ public class OrderInfoServiceIMPL {
             GoodsDetail goodsDetail = new GoodsDetail();
             goodsDetail.setGoodsDetaiId(orderInfo.getGoodsDetailId());
             System.out.println(goodsDetail);
-            GoodsDetailServiceIMPL goodsDetailServiceIMPL = new GoodsDetailServiceIMPL();
             List<GoodsDetail> rs = goodsDetailServiceIMPL.findWhateverYouWant(goodsDetail);
             if ((rs == null) || (rs.isEmpty()))
             {
@@ -51,9 +51,9 @@ public class OrderInfoServiceIMPL {
             }
 
 
-            UserInfoServiceIMPL userInfoServiceIMPL = new UserInfoServiceIMPL();
+
             //检测是否有这个id
-            if (userInfoServiceIMPL.selectUserInfo(orderInfo.getUserId()).getUserId() != null)
+            if (orderInfo.getUserId() == null)
             {
                 System.out.println("hewe");
                 return false;
@@ -61,7 +61,7 @@ public class OrderInfoServiceIMPL {
             Date endday = userInfoServiceIMPL.selectUserInfo(orderInfo.getUserId()).getEndTime();
             //查看会员是否到期
             Date now = new Date();
-            if (endday.before(now)) {
+            if (endday.after(now)) {
 
 
                 //计算会员优惠--- 1级0-200 9折，2级200-400 8折，3级400+
@@ -74,25 +74,35 @@ public class OrderInfoServiceIMPL {
                 } else {
                     discount = 0.7;
                 }
-                double price = orderInfo.getOrderPrice().doubleValue();
+                //更新积分
+                UserInfo userInfo = userInfoServiceIMPL.selectUserInfo(orderInfo.getUserId());
+                userInfo.setUserLevel(level+orderInfo.getOrderPrice().intValue());
+                userInfoServiceIMPL.updateLevel(userInfo);
+
+                double price = orderInfo.getOrderPrice().doubleValue() * discount;
                 orderInfo.setOrderPrice(BigDecimal.valueOf(price));
-                //更新积分--不做了
 
-                //订单创建时间和预计归还时间--不用做
-
-
-                //删除购物车里的同id商品
+                /*//删除购物车里的同id商品
                 ShopCart shopCart = new ShopCart();
                 shopCart.setUserId(orderInfo.getUserId());
                 shopCart.setGoodsDetailId(orderInfo.getGoodsDetailId());
 
                 ShopCartServiceIMPL shopCartServiceIMPL = new ShopCartServiceIMPL();
-                shopCartServiceIMPL.deleteShopCardByBothID(shopCart);
-                ;
+                shopCartServiceIMPL.deleteShopCardByBothID(shopCart);*/
+
 
                 //添加订单
                 orderInfoMapper.insert(orderInfo);
 
+                //库存减少
+                int newstock = rs.get(0).getStock()-orderInfo.getAmount();
+                goodsDetail.setStock(newstock);
+                goodsDetailServiceIMPL.updateStock(goodsDetail);
+
+            }
+            else{
+                System.out.println("you are not vip anymore");
+                return false;
             }
 
 
@@ -149,8 +159,10 @@ public class OrderInfoServiceIMPL {
     }
 
     //通过userid,goodsdetailid,租期，快递构建一个构建一个order
-    public OrderInfo buildOrder(ShopCart shopCart,int days,String dilivery){
+    public OrderInfo buildOrder(ShopCart shopCart,GoodsDetail mygoodsDetail,int days,String dilivery){
         //获取现在的日期
+        OrderInfo bulidorder = new OrderInfo();
+
         Calendar now=Calendar.getInstance();
         Date nowDate=now.getTime();
         //计算归还日期
@@ -158,9 +170,39 @@ public class OrderInfoServiceIMPL {
         leaseTerm.add(Calendar.DATE,days);
         Date leaseTermDate=leaseTerm.getTime();
 
-        //得到单价
+        bulidorder.setOrderDate(nowDate);
+        bulidorder.setLeaseTerm(leaseTermDate);
+
+        //set dilivery
+        bulidorder.setDelivery(dilivery);
+
+        //get price
+        BigDecimal price = goodsRoughServiceIMPL.findByGoodsRoughID(shopCart.getGoodsDetailId()).getGoodsPrice();
+        BigDecimal amount = new BigDecimal(Integer.toString(shopCart.getAmount()));
+        bulidorder.setOrderPrice(price.multiply(amount));
+
+        //set amount
+        bulidorder.setAmount(shopCart.getAmount());
+
+        //set userid
+        bulidorder.setUserId(shopCart.getUserId());
+
+        //get did
+        int did = goodsDetailServiceIMPL.findWhateverYouWant(mygoodsDetail).get(0).getGoodsDetaiId();
+        bulidorder.setGoodsDetailId(did);
+        bulidorder.setStatus(0);
+
+        //is sold out?
+        if(goodsDetailServiceIMPL.findWhateverYouWant(mygoodsDetail).get(0).getStock()>0)
+            return bulidorder;
+        else{
+            System.out.println("this is sold out");
+            return null;
+        }
+
+        /*//得到单价
         GoodsDetail goodsDetail=new GoodsDetail();
-        goodsDetail.setGoodsId(shopCart.getGoodsDetailId());
+        goodsDetail.setGoodsId(shopCart.getGoodsDetailId()); //shopcart中did其实是rid
         List<GoodsDetail> rsList=goodsDetailServiceIMPL.findWhateverYouWant(goodsDetail);
         if(rsList.isEmpty())
         {
@@ -191,13 +233,12 @@ public class OrderInfoServiceIMPL {
         //TOdo
         //确定订单状态
 
-        orderInfo.setStatus(0);
+        orderInfo.setStatus(0);*/
 
-        return orderInfo;
     }
 
     //找到今日的订单总数/金额，总交易额
-    public void findOrderNumberToday(){
+    public BigDecimal[] findOrderNumberToday(){
         Date now=new Date();
         Date start=new Date();
 
@@ -211,22 +252,38 @@ public class OrderInfoServiceIMPL {
         //获取今日订单
         List<OrderInfo> rs=this.findOrderBetween(yestodayDate,todayDate);
 
-        BigDecimal info[]=new BigDecimal[2];
+        BigDecimal info[]=new BigDecimal[3];
         //TODO
         //类型转换并装入
 
-        int count=rs.size();
+        double count=rs.size();
+        BigDecimal tmp=BigDecimal.valueOf(count);
+        info[0]=tmp;
 
-        BigDecimal money=new BigDecimal(0);
+        BigDecimal money=BigDecimal.valueOf(0);
         OrderInfo orderInfo=new OrderInfo();
 
         //遍历获取今日交易额
         for (int i=0;i<count;i++){
             orderInfo=rs.get(i);
-            money.add(orderInfo.getOrderPrice());
+            money=money.add(orderInfo.getOrderPrice());
         }
 
+	info[1]=money;
 
+
+
+        List<OrderInfo> allOrder=this.findAllOrder();
+        BigDecimal all=BigDecimal.valueOf(0);
+        int p=allOrder.size();
+
+        for (int i=0;i<p;i++){
+            all=all.add(allOrder.get(i).getOrderPrice());
+        }
+
+        info[2]=all;
+
+        return info;
 
 
     }
@@ -247,4 +304,12 @@ public class OrderInfoServiceIMPL {
         return orderInfoMapper.selectByExample(orderInfoExample);
     }
 
+	public List<OrderInfo> findAllOrder(){
+        OrderInfoExample orderInfoExample=new OrderInfoExample();
+        OrderInfoExample.Criteria criteria=orderInfoExample.createCriteria();
+
+        criteria.andOrderIdGreaterThan(0);
+
+        return orderInfoMapper.selectByExample(orderInfoExample);
+    }
 }

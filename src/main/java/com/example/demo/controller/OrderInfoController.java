@@ -10,21 +10,27 @@ import org.apache.commons.collections.list.GrowthList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 public class OrderInfoController {
     @Autowired
     private OrderInfoServiceIMPL orderInfoServiceIMPL;
-
+    @Autowired
+    private GoodsDetailServiceIMPL goodsDetailServiceIMPL;
+    @Autowired
+    private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
     @PostMapping("/updateOrderInfo") //checked
     public void updateOrderInfo(OrderInfo orderInfo){ orderInfoServiceIMPL.updateOrderInfo(orderInfo);} //by primary key
 
     @PostMapping("/deleteOrderInfo/{id}") //checked
     public void deleteOrderInfo(@PathVariable("id") Integer id){orderInfoServiceIMPL.deleteOrderInfo(id);}
 
-    @PostMapping("/addOrderInfo") //uncheck
+    @PostMapping("/addOrderInfo") //c
     public boolean addOrderInfo(OrderInfo orderInfo){ return orderInfoServiceIMPL.addOrderInfo(orderInfo);}
 
     @GetMapping("/findOrderByUserID/{id}") //chaecked
@@ -60,6 +66,31 @@ public class OrderInfoController {
              int goodsId=goodsDetailServiceIMPL.findGoodsId(goodsDetailId);
              GoodsRough goodsRough=goodsRoughServiceIMPL.findByGoodsRoughID(goodsId);
              goodsRoughs.add(goodsRough);
+
+        }
+        return goodsRoughs;
+    }
+   @GetMapping("/admin/findOrderNumberToday")
+            public BigDecimal[] findOrderNumberToday(){
+
+        return orderInfoServiceIMPL.findOrderNumberToday();
+    }
+    @GetMapping("/admin/findAllOrder")
+    public List<OrderInfo> findAllOrder(){
+       return orderInfoServiceIMPL.findAllOrder();
+    }
+    @GetMapping("/admin/findAllOrderDetail") //
+    public List<GoodsRough>  findAllOrderDetail(){
+        List<OrderInfo> orderInfos= orderInfoServiceIMPL.findAllOrder();
+
+
+        List<GoodsRough> goodsRoughs=new ArrayList<>();
+        for (OrderInfo orderInfo:orderInfos){
+            int goodsDetailId=orderInfo.getGoodsDetailId();
+            System.out.println(goodsDetailId);
+            int goodsId=goodsDetailServiceIMPL.findGoodsId(goodsDetailId);
+            GoodsRough goodsRough=goodsRoughServiceIMPL.findByGoodsRoughID(goodsId);
+            goodsRoughs.add(goodsRough);
 
         }
         return goodsRoughs;
