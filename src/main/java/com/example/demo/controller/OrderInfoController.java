@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.GoodsDetail;
 import com.example.demo.entity.GoodsRough;
+import com.example.demo.entity.OrderAndGoodsInfo;
 import com.example.demo.entity.OrderInfo;
 import com.example.demo.service.GoodsDetailServiceIMPL;
 import com.example.demo.service.GoodsRoughServiceIMPL;
@@ -24,6 +25,9 @@ public class OrderInfoController {
     private GoodsDetailServiceIMPL goodsDetailServiceIMPL;
     @Autowired
     private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
+    @Autowired
+    private OrderAndGoodsInfo orderAndGoodsInfo;
+
     @PostMapping("/updateOrderInfo") //checked
     public void updateOrderInfo(OrderInfo orderInfo){ orderInfoServiceIMPL.updateOrderInfo(orderInfo);} //by primary key
 
@@ -94,5 +98,15 @@ public class OrderInfoController {
 
         }
         return goodsRoughs;
+    }
+
+    @GetMapping("/findOrderAndGoodsInfo")
+    public List<OrderAndGoodsInfo> findOrderAndGoodsInfo(OrderInfo orderInfo)
+    {
+        System.out.println("---------------findOrderAndGoodsInfo-------------------------");
+        System.out.println(orderInfo);
+        System.out.println("-------------------------------------------------------------");
+        System.out.println(orderInfoServiceIMPL.findOrderAndGoodsInfo(orderInfo));
+       return orderInfoServiceIMPL.findOrderAndGoodsInfo(orderInfo);
     }
 }

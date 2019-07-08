@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.entity.GoodsDetail;
 import com.example.demo.entity.GoodsDetailExample;
+import com.example.demo.entity.GoodsRough;
 import com.example.demo.entity.OrderInfo;
 import com.example.demo.mapper.GoodsDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import java.util.List;
 public class GoodsDetailServiceIMPL {
     @Autowired
     private GoodsDetailMapper goodsDetailMapper;
-
+@Autowired
+private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
 
     //通过goodsDetailid删除
     public void deleteByGoodsDetailByDetailID(int id){
@@ -68,6 +70,17 @@ public class GoodsDetailServiceIMPL {
     public int findGoodsId(Integer goodDetailId){
         GoodsDetail goodsDetail=goodsDetailMapper.selectByPrimaryKey(goodDetailId);
         return goodsDetail.getGoodsId();
+    }
+
+    public GoodsDetail findGoodsDetailByKey(int id)
+    {
+        return goodsDetailMapper.selectByPrimaryKey(id);
+    }
+
+    public GoodsRough findGoodRoughByDetailId(int id)
+    {
+        int goodsRoughId = goodsDetailMapper.findGoodRoughIdByDetailId(id);
+        return goodsRoughServiceIMPL.findByGoodsRoughID(goodsRoughId);
     }
 
     public void updateStock(GoodsDetail goodsDetail)

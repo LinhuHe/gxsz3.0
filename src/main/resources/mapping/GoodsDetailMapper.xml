@@ -228,4 +228,7 @@
     set stock = #{stock,jdbcType=INTEGER}
     where goods_detai_id = #{goodsDetaiId,jdbcType=INTEGER}
   </update>
+  <select id="findGoodRoughByDetailId"  resultMap= "BaseResultMap">
+    select goods_id from goods_detail where goods_detai_id = #{id}
+  </select>
 </mapper>

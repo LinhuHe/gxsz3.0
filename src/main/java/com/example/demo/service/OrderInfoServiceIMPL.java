@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,8 @@ public class OrderInfoServiceIMPL {
     private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
     @Autowired
     private UserInfoServiceIMPL userInfoServiceIMPL;
+
+
     //直接更新orderInfo
     public void updateOrderInfo(OrderInfo orderInfo){
         orderInfoMapper.updateByPrimaryKey(orderInfo);
@@ -311,5 +314,32 @@ public class OrderInfoServiceIMPL {
         criteria.andOrderIdGreaterThan(0);
 
         return orderInfoMapper.selectByExample(orderInfoExample);
+    }
+
+    public List<OrderAndGoodsInfo> findOrderAndGoodsInfo(OrderInfo orderInfo){
+        //get all orderInfo
+        List<OrderInfo> orderlist = findOrderByUserID(orderInfo.getUserId());
+        List<OrderAndGoodsInfo> orderAndGoodsInfolist = new ArrayList<OrderAndGoodsInfo>();
+
+        //find goodsRough info and store
+        for(OrderInfo odif:orderlist)
+        {
+            GoodsDetail gsdtl = goodsDetailServiceIMPL.findGoodsDetailByKey(odif.getGoodsDetailId());
+            GoodsRough gsr = goodsRoughServiceIMPL.findByGoodsRoughID(gsdtl.getGoodsId());
+            OrderAndGoodsInfo orderAndGoodsInfo = new OrderAndGoodsInfo();
+            orderAndGoodsInfo.setOrderId(odif.getOrderId());
+            orderAndGoodsInfo.setLeaseTerm(odif.getLeaseTerm());
+            orderAndGoodsInfo.setDelivery(odif.getDelivery());
+            orderAndGoodsInfo.setOrderDate(odif.getOrderDate());
+            orderAndGoodsInfo.setStatus(odif.getStatus());
+            orderAndGoodsInfo.setGoodsName(gsr.getGoodsName());
+            orderAndGoodsInfo.setBrand(gsr.getBrand());
+            orderAndGoodsInfo.setGoodsPicUrl(gsr.getGoodsPicUrl());
+            orderAndGoodsInfo.setLable(gsr.getLable());
+            orderAndGoodsInfolist.add(orderAndGoodsInfo);
+        }
+
+
+        return orderAndGoodsInfolist;
     }
 }

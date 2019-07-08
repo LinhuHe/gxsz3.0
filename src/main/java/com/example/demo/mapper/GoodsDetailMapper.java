@@ -3,6 +3,8 @@ package com.example.demo.mapper;
 import com.example.demo.entity.GoodsDetail;
 import com.example.demo.entity.GoodsDetailExample;
 import java.util.List;
+
+import com.example.demo.entity.GoodsRough;
 import org.apache.ibatis.annotations.Param;
 
 public interface GoodsDetailMapper {
@@ -29,4 +31,6 @@ public interface GoodsDetailMapper {
     int updateByPrimaryKey(GoodsDetail record);
 
     void updateStock(GoodsDetail goodsDetail);
+
+    int findGoodRoughIdByDetailId(int id);
 }
