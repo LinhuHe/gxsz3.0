@@ -52,6 +52,7 @@ public class ShopCartServiceIMPL {
     public boolean buyFromShopCart(ShopCart shopCart,GoodsDetail goodsDetail,int days,String dilivery){
         boolean flag=false;
         OrderInfo newOrder=orderInfoServiceIMPL.buildOrder(shopCart,goodsDetail,days,dilivery);
+        if(newOrder==null) return false;
         flag=orderInfoServiceIMPL.addOrderInfo(newOrder);
 
         //finish order delete shop cart

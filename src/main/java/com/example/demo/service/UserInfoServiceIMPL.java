@@ -6,6 +6,7 @@ import com.example.demo.mapper.UserInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.UnknownServiceException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -133,6 +134,11 @@ public class UserInfoServiceIMPL  {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public void updatePhoneAndAddress(UserInfo userInfo)
+    {
+        userInfoMapper.updatePhoneAndAddress(userInfo);
     }
 
 }

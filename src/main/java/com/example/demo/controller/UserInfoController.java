@@ -54,4 +54,11 @@ public class UserInfoController {
 
     @GetMapping("yourendtime/{id}")
     public Date yourEndDate(@PathVariable("id") String id){return userInfoServiceIMPL.yourEndDate(id);}
+
+    @PostMapping("/updatePhoneAndAddress")  //need id phone address
+    public void updatePhoneAndAddress(UserInfo userInfo)
+    {
+        userInfoServiceIMPL.updatePhoneAndAddress(userInfo);
+    }
+
 }

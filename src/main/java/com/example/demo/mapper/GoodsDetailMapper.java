@@ -33,4 +33,6 @@ public interface GoodsDetailMapper {
     void updateStock(GoodsDetail goodsDetail);
 
     int findGoodRoughIdByDetailId(int id);
+
+    GoodsDetail findLeastStock();
 }

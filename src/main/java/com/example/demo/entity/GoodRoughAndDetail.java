@@ -1,10 +1,23 @@
 package com.example.demo.entity;
 
+import org.springframework.stereotype.Repository;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class GoodsRough {
+@Repository
+public class GoodRoughAndDetail {
+    private Integer goodsDetaiId;
+
     private Integer goodsId;
+
+    private String color;
+
+    private String size;
+
+    private Integer stock;
+
+    private String style;
 
     private String brand;
 
@@ -18,12 +31,52 @@ public class GoodsRough {
 
     private String lable;
 
+    public Integer getGoodsDetaiId() {
+        return goodsDetaiId;
+    }
+
+    public void setGoodsDetaiId(Integer goodsDetaiId) {
+        this.goodsDetaiId = goodsDetaiId;
+    }
+
     public Integer getGoodsId() {
         return goodsId;
     }
 
     public void setGoodsId(Integer goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public String getStyle() {
+        return style;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
     }
 
     public String getBrand() {
@@ -72,18 +125,5 @@ public class GoodsRough {
 
     public void setLable(String lable) {
         this.lable = lable;
-    }
-
-    @Override
-    public String toString() {
-        return "GoodsRough{" +
-                "goodsId=" + goodsId +
-                ", brand='" + brand + '\'' +
-                ", goodsName='" + goodsName + '\'' +
-                ", goodsPicUrl='" + goodsPicUrl + '\'' +
-                ", marketDate=" + marketDate +
-                ", goodsPrice=" + goodsPrice +
-                ", lable='" + lable + '\'' +
-                '}';
     }
 }

@@ -77,6 +77,13 @@ public class OrderInfoServiceIMPL {
                 } else {
                     discount = 0.7;
                 }
+                //she zhi jia ge  购物车跳转过来的order有价格 但是直接购买没有这个属性
+                if(orderInfo.getOrderPrice()==null) {
+                    GoodsDetail mygoodsDetail = goodsDetailServiceIMPL.findGoodsDetailByKey(orderInfo.getGoodsDetailId());
+                    GoodsRough goodsRough = goodsRoughServiceIMPL.findByGoodsRoughID(mygoodsDetail.getGoodsId());
+                    orderInfo.setOrderPrice(goodsRough.getGoodsPrice());
+                }
+
                 //更新积分
                 UserInfo userInfo = userInfoServiceIMPL.selectUserInfo(orderInfo.getUserId());
                 userInfo.setUserLevel(level+orderInfo.getOrderPrice().intValue());
@@ -193,7 +200,7 @@ public class OrderInfoServiceIMPL {
         //get did
         int did = goodsDetailServiceIMPL.findWhateverYouWant(mygoodsDetail).get(0).getGoodsDetaiId();
         bulidorder.setGoodsDetailId(did);
-        bulidorder.setStatus(0);
+        bulidorder.setStatus(1);
 
         //is sold out?
         if(goodsDetailServiceIMPL.findWhateverYouWant(mygoodsDetail).get(0).getStock()>0)
@@ -341,5 +348,27 @@ public class OrderInfoServiceIMPL {
 
 
         return orderAndGoodsInfolist;
+    }
+
+    public boolean updateStatusByClick(int id,String Click){
+
+        if(orderInfoMapper.selectByPrimaryKey(id)==null) return false;
+
+        switch(Click)
+        {
+            case "返还":
+            {
+                orderInfoMapper.updateStatusByClick(id,5);
+                break;
+            }
+            case "确认收货":
+            {
+                orderInfoMapper.updateStatusByClick(id,3);
+                break;
+            }
+            default: return false;
+        }
+
+        return true;
     }
 }

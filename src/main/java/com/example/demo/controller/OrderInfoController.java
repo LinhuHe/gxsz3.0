@@ -34,11 +34,18 @@ public class OrderInfoController {
     @PostMapping("/deleteOrderInfo/{id}") //checked
     public void deleteOrderInfo(@PathVariable("id") Integer id){orderInfoServiceIMPL.deleteOrderInfo(id);}
 
-    @PostMapping("/addOrderInfo") //c
-    public boolean addOrderInfo(OrderInfo orderInfo){ return orderInfoServiceIMPL.addOrderInfo(orderInfo);}
+    @PostMapping("/addOrderInfo") //need userid goodsdid amount delivery status
+    public boolean addOrderInfo(OrderInfo orderInfo){
+        System.out.println("------------------addOrderInfo---------------------");
+        System.out.println(orderInfo);
+        System.out.println("---------------------------------------------------");
+        return orderInfoServiceIMPL.addOrderInfo(orderInfo);
+    }
 
     @GetMapping("/findOrderByUserID/{id}") //chaecked
-    public List<OrderInfo> findOrderByUserID(@PathVariable("id") String id){return orderInfoServiceIMPL.findOrderByUserID(id);}
+    public List<OrderInfo> findOrderByUserID(@PathVariable("id") String id){
+        return orderInfoServiceIMPL.findOrderByUserID(id);
+    }
 
     @GetMapping("/findOrderByGoodsDetailID/{id}") //checked
     public List<OrderInfo> findOrderByGoodsDetailID(@PathVariable("id") Integer id){return orderInfoServiceIMPL.findOrderByGoodsDetailID(id);}
@@ -108,5 +115,13 @@ public class OrderInfoController {
         System.out.println("-------------------------------------------------------------");
         System.out.println(orderInfoServiceIMPL.findOrderAndGoodsInfo(orderInfo));
        return orderInfoServiceIMPL.findOrderAndGoodsInfo(orderInfo);
+    }
+
+    @PostMapping("/updateStatusByClick")
+    public boolean updateStatusByClick(int id,String Click){
+        System.out.println("-------------------updateStatusByClick-------------------------");
+        System.out.println("id:"+id+ "  Click"+Click);
+        System.out.println("---------------------------------------------------------------");
+        return orderInfoServiceIMPL.updateStatusByClick(id,Click);
     }
 }

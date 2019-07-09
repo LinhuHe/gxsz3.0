@@ -33,4 +33,6 @@ public interface UserInfoMapper {
     void updateDate(UserInfo userInfo);
 
     void  updateLevel(UserInfo userInfo);
+
+    void updatePhoneAndAddress(UserInfo userInfo);
 }

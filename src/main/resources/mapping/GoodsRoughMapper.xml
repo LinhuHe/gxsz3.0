@@ -246,4 +246,7 @@
   <select id="findDistinctBranch" resultType= "String">
     select distinct brand from goods_rough
   </select>
+  <select id="findLowestPrice" resultMap="BaseResultMap">
+     select * from goods_rough order by goods_price desc limit 1
+  </select>
 </mapper>

@@ -250,4 +250,10 @@
     set end_time = #{endTime,jdbcType=DATE}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+  <update id="updatePhoneAndAddress" parameterType="com.example.demo.entity.UserInfo">
+    update user_info
+    set user_phone = #{userPhone,jdbcType=VARCHAR},
+    user_address = #{userAddress,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </update>
 </mapper>

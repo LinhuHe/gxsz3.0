@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.GoodsDetail;
 import com.example.demo.entity.GoodsRough;
 import com.example.demo.mapper.GoodsRoughMapper;
 import com.example.demo.service.GoodsRoughServiceIMPL;
@@ -34,6 +35,12 @@ public class GoodsRaughController {
     @PostMapping("/addGoodRough")  //checked
     public void addGoodRough(GoodsRough goodsRough){goodsRoughServiceIMPL.addGoodRough(goodsRough);}
 
+    @GetMapping("/findByGoodsRoughID/{id}")
+    public GoodsRough findByGoodsRoughID(@PathVariable("id") int id){return goodsRoughServiceIMPL.findByGoodsRoughID(id);}
+
+    @GetMapping("/findByBrand")
+    public List<GoodsRough> findByBrand(GoodsRough goodsRough){return goodsRoughServiceIMPL.findByBrand(goodsRough);}
+
     @GetMapping("/findNewGoodsByDate") //checked
     public List<GoodsRough> findNewGoodsByDate(GoodsRough goodsRough){return goodsRoughServiceIMPL.findNewGoodsByDate(goodsRough);}
 
@@ -42,4 +49,20 @@ public class GoodsRaughController {
 
     @GetMapping("/findDistinctBranch")
     public List<GoodsRough> findDistinctBranch(){return goodsRoughServiceIMPL.findDistinctBranch();}
+
+    @GetMapping("/findByRoughAndDetail")
+    public List<GoodsRough> findByRoughAndDetail(GoodsRough goodsRough, GoodsDetail goodsDetail){
+        System.out.println("----------------findByRoughAndDetail-----------------------");
+        System.out.println(goodsRough);
+        System.out.println(goodsDetail);
+        System.out.println("-----------------------------------------------------------");
+
+        return goodsRoughServiceIMPL.findByRoughAndDetail(goodsRough,goodsDetail);
+    }
+
+    @GetMapping("/RandGiveYou")
+    public List<GoodsRough> RandGiveYou(){return goodsRoughServiceIMPL.RandGiveYou();}
+
+    @GetMapping("/unicodeRecommed")
+    public List<GoodsRough> unicodeRecommed(){return goodsRoughServiceIMPL.unicodeRecommed();}
 }

@@ -231,4 +231,7 @@
   <select id="findGoodRoughByDetailId"  resultMap= "BaseResultMap">
     select goods_id from goods_detail where goods_detai_id = #{id}
   </select>
+  <select id="findLeastStock" resultMap= "BaseResultMap">
+    select * from goods_detail order by stock desc limit 1
+  </select>
 </mapper>

@@ -31,4 +31,6 @@ public interface GoodsRoughMapper {
     String[] findDistinctBranch();
 
     List<GoodsRough> findTopFiveByDate();
+
+    GoodsRough findLowestPrice();
 }

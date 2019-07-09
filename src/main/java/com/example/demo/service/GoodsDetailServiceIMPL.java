@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.GoodsDetail;
-import com.example.demo.entity.GoodsDetailExample;
-import com.example.demo.entity.GoodsRough;
-import com.example.demo.entity.OrderInfo;
+import com.example.demo.entity.*;
 import com.example.demo.mapper.GoodsDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,5 +83,11 @@ private GoodsRoughServiceIMPL goodsRoughServiceIMPL;
     public void updateStock(GoodsDetail goodsDetail)
     {
         goodsDetailMapper.updateStock(goodsDetail);
+    }
+
+    public GoodsRough findLeastStock(){
+        GoodsDetail goodsDetail = goodsDetailMapper.findLeastStock();
+        GoodsRough goodsRough = goodsRoughServiceIMPL.findByGoodsRoughID(goodsDetail.getGoodsId());
+        return  goodsRough;
     }
 }
